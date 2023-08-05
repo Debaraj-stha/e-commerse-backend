@@ -162,6 +162,11 @@ messages:[
   }
 ]
 })
+const messageToShop=mongoose.Schema({
+  shopId:String,
+  message:String,
+  audiance:String
+},{timestamps:true})
 const userMessageModel=mongoose.model('userMessage',userMessageSchema)
 const shopModel = mongoose.model("shop", shopSchema);
 const userModel = mongoose.model("user", userSchema);
@@ -171,7 +176,9 @@ const questionModel = mongoose.model("question", questionSchema);
 const orderModel = mongoose.model("order", orderSchema);
 const soldModel = mongoose.model("sold", soldSchema);
 const messageModel = mongoose.model("message", messageSchema);
+const messageToShopModel=mongoose.model("messageToShop", messageToShop)
 module.exports = {
+  messageToShopModel,
   messageModel,
   shopModel,
   soldModel,

@@ -8,6 +8,7 @@ const {
   reviewModel,
   messageModel,
   userMessageModel,
+  messageToShopModel,
 } = require("../schema/schema");
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
@@ -608,10 +609,10 @@ router.get("/dashboard", async (req, res) => {
     const today = moment().startOf("day");
     const yesterday = moment().subtract(1, "days").startOf("day");
     const currentDate = moment();
-    
+
     const lastYearSellArray = [];
     const lastSevenDaysSellArray = [];
-    
+
     let todayData = await soldModel
       .find({ createdAt: { $gte: today } })
       .then((result) => {
@@ -633,7 +634,7 @@ router.get("/dashboard", async (req, res) => {
       });
 
       const totalSold = monthData.reduce((acc, item) => acc + item.sold, 0);
-      console.log(monthData)
+      console.log(monthData);
       lastYearSellArray.unshift(totalSold);
     }
 
@@ -643,7 +644,7 @@ router.get("/dashboard", async (req, res) => {
         .clone()
         .subtract(i - 1, "days")
         .startOf("day");
-        console.log(startDate, endDate)
+      console.log(startDate, endDate);
       const dayData = await soldModel.find({
         createdAt: { $gte: startDate, $lt: endDate },
       });
@@ -651,12 +652,12 @@ router.get("/dashboard", async (req, res) => {
       const totalSold = dayData.reduce((acc, item) => acc + item.sold, 0);
       lastSevenDaysSellArray.unshift(totalSold);
     }
-console.log(yesterdaydata)
+    console.log(yesterdaydata);
     res.render("dashbord", {
       lastYearSellArray,
       lastSevenDaysSellArray,
       todayData,
-      yesterdaydata 
+      yesterdaydata,
     });
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -1085,9 +1086,34 @@ router.get("/get-order", async (req, res) => {
       res.status(500).send({ message: err.message });
     });
 });
-router.get('/shops',(req, res) => {
+router.get("/shops", (req, res) => {
   shopModel.find({}).then((shop) => {
-    res.render('mainDashboard',{shop:shop})
+    res.render("shops", { shop: shop });
+  });
+});
+router.get("/message/to-shop", (req, res) => {
+  const shopId=req.query.shopId;
+  messageToShopModel.find({$or:[{shopId: shopId},{audiance:'all'}]}).sort({createdAt:-1}).then((response)=>{
+    res.render("messageToShop",{messsage:response});
+  }).catch(err => {
+    console.error(err);
   })
-})
+  
+});
+router.post("/message/to-shop", async (req, res) => {
+  try {
+    const { message,audiance } = req.body;
+    console.log(req.body);
+    const shopId = req.query.shopId;
+    const messageToShop = new messageToShopModel({
+      message: message,
+      shopId: shopId,
+      audiance:audiance
+    });
+    await messageToShop.save();
+    res.status(200).send({ message: "success" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+});
 module.exports = router;

@@ -1,0 +1,82 @@
+{{>cdn}}
+<h1>Shops</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Shop Name</th>
+            <th>Shop Address</th>
+            <th>Shop Phone</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="shop">
+      
+    </tbody>
+</table>
+<div id="pages"class="pagination pagination-sm">
+</div>
+<script>
+    var shopData={{{jsonToString shop}}}
+    const shopListHolder=document.getElementById("shop")
+    const pages=document.getElementById('pages')
+    let itemsPerPage=10
+    let currentPage=1
+
+function displayShop(items,wrapper,page,itemsPerPage){
+    console.log(shopData)
+    wrapper.innerHTML = "";
+    const start = (page - 1) * itemsPerPage; 
+    const end = start + itemsPerPage;
+    const pageData = items.slice(start, end); 
+
+for(let i=0;i<pageData.length;i++){
+    let shop=pageData[i];
+    let tr=document.createElement("tr")
+    let nametd = document.createElement("td")
+    let locationtd=document.createElement("td")
+    let phonetd=document.createElement("td")
+    let button=document.createElement("button")
+    let a=document.createElement('a')
+    button.classList.add('btn')
+    button.classList.add('btn-success')
+    a.href= `/message/to-shop?shopId=${shop._id}`
+    a.innerText="Message"
+    a.classList.add('text-dark')
+    button.appendChild(a)
+    nametd.innerText=shop.name;
+    locationtd.innerText=shop.location;
+    phonetd.innerText=shop.phone?shop.phone:"";
+    tr.appendChild(nametd)
+    tr.appendChild(locationtd)
+
+    tr.appendChild(phonetd);
+    tr.appendChild(button )
+    wrapper.appendChild(tr)
+}
+}
+function displayPage(items,wrapper,itemsPerPage){
+let page=Math.ceil(items.length/itemsPerPage)
+for(i=1;i<page+1;i++){
+    let button=createButton(i,items)
+    wrapper.appendChild(button)
+}
+}
+function createButton(page,items){
+let button=document.createElement('button')
+button.innerText=page
+button.classList.add('btn')
+if(currentPage==page){
+    button.classList.add('btn-primary')
+}
+button.addEventListener('click', function(){
+    currentPage=page
+    let currentButton=document.querySelector('.btn-primary')
+    currentButton.classList.remove('btn-primary')
+    button.classList.add('btn-primary')
+    displayShop(items,shopListHolder,page,itemsPerPage)
+})
+return button;
+}
+displayShop(shopData,shopListHolder,pages,itemsPerPage)
+displayPage(shopData,pages,itemsPerPage)
+</script>
