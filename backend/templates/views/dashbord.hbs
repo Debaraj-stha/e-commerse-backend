@@ -1,0 +1,131 @@
+{{>cdn}}
+{{>style}}
+{{>nav}}
+<div class="row justify-center m-3 p-3">
+	<div class="col-sm-4 bg-primary p-5 m-5">
+	  <div class="card bg-primary text-white">
+		<div class="card-body">
+		  <div class="col-8">
+		  <h5 class="card-title">Yesterday sales</h5>
+		  <p class="card-text" id="yesterday"></p>
+		  </div>
+		  <div class="col-4">
+			<i class="fa fa-file-text-o"> </i>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="col-sm-4 bg-success p-5 m-5">
+		<div class="card bg-success text-white">
+		  <div class="card-body">
+			<div class="col-8">
+			<h5 class="card-title">Today Sales</h5>
+			<p class="card-text"id="today">83</p>
+			</div>
+			<div class="col-4">
+			  <i class="fa fa-file-text-o"> </i>
+			</div>
+		  </div>
+		</div>
+	  </div>
+  </div>
+  
+
+<div class="h-50 m-5 ">
+<canvas id="lineChart"></canvas>
+</div>
+<div class="h-50 m-5">
+<canvas id="weaklySales"></canvas>
+</div>
+<div class="h-50 m-5">
+  <canvas id="yearlySales"></canvas>
+  </div>
+<footer class="text-center text-success">
+  All Rights Reserved
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    //line
+var ctxL = document.getElementById("lineChart").getContext('2d');
+var lastYearSellArray = {{ jsonToString lastYearSellArray }};
+var myLineChart = new Chart(ctxL, {
+  type: 'line',
+  data: {
+    labels: ["January", "February", "March", "April", "May", "June", "July","August", "September", "October", "November", "December"],
+    datasets: [{
+      label: "Monthly sales",
+      data:lastYearSellArray,
+      backgroundColor: [
+        'rgba(105, 0, 132, .2)',
+      ],
+      borderColor: [
+        'rgba(200, 99, 132, .7)',
+      ],
+      borderWidth: 2
+    },
+   
+    ]
+  },
+  options: {
+    responsive: true
+  }
+});
+var lastSevenDaysSellArray = {{ jsonToString lastSevenDaysSellArray }};
+//doughnut
+  var ctxD = document.getElementById("weaklySales").getContext('2d');
+  var myLineChart = new Chart(ctxD, {
+    type: 'line',
+    data: {
+      labels: ["Sun", "Mon", "Tue", "Wed", "Thus",'Fri','Sat'],
+     datasets: [{
+      label:"Weakly sales",
+      data:lastSevenDaysSellArray,
+      backgroundColor: [
+      'rgba(105, 0, 132, .2)',
+    ],
+    borderColor: [
+      'rgba(200, 99, 132, .7)',
+    ],
+    borderWidth: 2
+     }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+  
+  var yearlySales=document.getElementById("yearlySales")
+  new Chart(yearlySales,{
+    type:"bar",
+    data:{
+      labels:[2020,2021,2022,2023],
+      datasets:[
+      {
+        label:"yearlySales",
+        data:[20000,4000,5000,10000],
+        borderWidth:1
+      }]
+    },
+    options:{
+      scales:{
+        y:{
+          beginAtZero: true
+        }
+      }
+    }
+  })
+  var todaysData = {{ todayData }};
+  var yesterdaydata = {{ yesterdaydata }};
+ 
+  
+  
+  // Log the values to the console for verification
+  console.log("todaysData:", todaysData);
+  console.log("yesterdaydata:", yesterdaydata);
+  console.log("lastYearSellArray:", lastYearSellArray);
+  console.log("lastSevenDaysSellArray:", lastSevenDaysSellArray);
+  const todays=document.getElementById('today')
+  const yesterdays=document.getElementById('yesterday')
+  todays.innerText=todaysData
+  yesterdays.innerText=yesterdaydata
+</script>

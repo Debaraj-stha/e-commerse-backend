@@ -1,0 +1,34 @@
+{{>cdn}}
+{{>nav}}
+<div class="container mt-4 p-3">
+  <h1 class="text-success text-uppercase text-center m-5">Product Questions</h1>
+</div>
+{{#each result}}
+{{#each this}}
+
+{{#each product}}
+<a href="/product/question/answer?questionId={{id}}&productId={{_id}}" class="nav-link">
+   
+  <div class="product p-4">
+  
+      <div class="circularImage">
+        <img class="mr-3" src={{this.images}} alt="Generic placeholder image" height="100" width="100">
+      </div>
+    {{/each}}
+   
+      <div class="media">
+        <div class="media-body">
+         
+          <h6>Question: {{question}}, {{questionDate}}</h6>
+          <small>
+            {{#each user}}
+              <p>User: {{this.name}}</p>
+            {{/each}}
+          </small>
+          <h6>Answer: {{answer}}</h6>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</a>
+{{/each}}

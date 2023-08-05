@@ -1,0 +1,152 @@
+{{>cdn}}
+{{>nav}}
+<h1 class=" text-success text-uppercase text-center m-5 p-4">Message to Shop</h1>
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Query Product</th>
+        <th>Message</th>
+        <th>Is Sender</th>
+        <th>Date/Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each myMessage}}
+        {{#each messages}}
+          <tr>
+            <td>{{../userId}}</td>
+            <td>{{queryProduct}}</td>
+            <td>{{message}}</td>
+            <td>{{isSender}}</td>
+            <td>{{at}}</td>
+            <td><button class="btn btn-success openModelButton" data-user-id="{{../userId}}" data-shop-id={{../shopId}} id="openModel">Respond</button></td>
+          </tr>
+        {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
+  
+ 
+<h1 class=" text-success text-uppercase text-center m-5 p-4">post a message</h1>
+<container class="m-auto">
+    <div class="m-5 p-5">
+<form id="messageForm">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">title:</label>
+        <input type="text" class="form-control" name="title" id="title" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Description:</label>
+        <textarea class="form-control" id="description" rows="3"name="description"></textarea>
+    </div>
+    <div class="mb-3">
+        <input type="submit" class="btn btn-primary" id="updateData" value="Post">
+    </div>
+</form>
+</div>
+</container>
+<div class="modal fade" id="messageModel" tabindex="-1" aria-labelledby="updateModel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateModel">Image updatemodal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="updateForm">
+            <input type="hidden" name="shopId" id="shopId">
+            <input type="hidden" name="userId" id="userId">
+            <input type="hidden" name="isSender" value=true>
+            <div class="mb-3 form-group">
+              <label for="exampleFormControlInput1" class="form-label">Message:</label>
+              <textarea class="form-control" id="message" rows="3"name="message"></textarea>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" id="updateData" value="Update">
+        </div>
+        </form>
+      </div>
+    </div>
+    
+    
+ 
+  </div>
+  <script>
+    
+ 
+  </script>
+<script>
+
+  var myMessageData = {{{jsonToString myMessage}}};
+  console.log(myMessageData);
+
+var myButton=document.querySelectorAll('.openModelButton')
+
+
+  var myButton = document.querySelectorAll('.openModelButton');
+  var model = document.getElementById('messageModel');
+  var myModel = new bootstrap.Modal(model);
+  myButton.forEach((button) =>
+    button.addEventListener('click', function (e) {
+      var shopId = button.dataset.shopId;
+      var userId = button.dataset.userId;
+var shop=document.getElementById('shopId')
+var user=document.getElementById('userId')
+shop.value=shopId;
+user.value=userId;
+      
+      
+      myModel.show();
+    })
+  );
+
+  
+$('#updateForm').on('submit',function(e){
+    e.preventDefault();
+    const url="http://localhost:8000/message-to/shop";
+    const data=$(this).serialize();
+    const headers={
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    $.post({
+        url: url,
+        method:'POST',
+        data:data,
+        headers:headers,
+        success: function (response) {
+            console.log(response);
+          },
+          error: function (error) {
+            console.error(error);
+          }
+    })
+    
+    myModel.hide();
+})
+$('#messageForm').on("submit",function(e){
+    e.preventDefault()
+    console.log("test")
+    const url="http://localhost:8000/message";
+    const data=$(this).serialize();
+    const headers={
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    $.post({
+        url: url,
+        method:'POST',
+        data:data,
+        headers:headers,
+        success: function (response) {
+            console.log(response);
+          },
+          error: function (error) {
+            console.error(error);
+          }
+    })
+})
+</script>

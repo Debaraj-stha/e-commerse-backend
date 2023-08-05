@@ -1,0 +1,68 @@
+{{>cdn}}
+<h1 class=" text-success text-uppercase text-center m-5">Register your   your shop</h1>
+<container class="m-auto">
+    <div class="m-5 p-5">
+<form id="registerShop">
+    <div class="row">
+        <div class="mb-3 col-md-6 col-6-lg">
+            <label for="exampleFormControlInput1" class="form-label">Name:</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="">
+        </div>
+    <div class="mb-3 col-md-6 col-6-lg">
+        <label for="exampleFormControlInput1" class="form-label">Phone:</label>
+        <input type="text" class="form-control" name="phone" id="phone" placeholder="">
+    </div>
+    <div class="row">
+        <div class="mb-3 col-md-6 col-6-lg">
+            <label for="exampleFormControlInput1" class="form-label">Location:</label>
+            <input type="text" class="form-control" name="location" id="location" placeholder="">
+        </div>
+    <div class="mb-3 col-md-6 col-6-lg">
+        <label for="exampleFormControlInput1" class="form-label">Image:</label>
+        <input type="text" class="form-control" name="image" id="image" placeholder="">
+    </div>
+</div>
+
+    <div class="mb-3 col-md-6 col-6-lg">
+        <input type="submit" class="btn btn-primary" id="registerShop" value="Register">
+      
+    </div>
+    <p>Already registerd?</p>
+    <div class="mb-3 col-md-6 col-6-lg">
+        <a href="/shop/login"><input type="button" class="btn btn-primary" id="loginShop" value="Login"></a>
+      
+    </div>
+    <div class="alert alert-primary" role="alert">
+       
+      </div>
+</form>
+<script>
+  
+	$(document).ready(function(){
+		$('#registerShop').on('submit', function(e){
+			e.preventDefault()
+            let alert=document.querySelector(".alert");
+            alert.setAttribute("style",'display:none,width:0px')
+			let url="http://localhost:8000/shop/register";
+			let data=$(this).serialize();
+			let header={
+				'Content-Type': 'application/x-www-from-urlencoded'
+			}
+			$.post({
+				url:url,
+				method: 'POST',
+				data:data,
+				header:header,
+				success:function(response){
+					console.log(response)
+                    alert.setAttribute("style",'display:block')
+						alert.innerText="Success"
+                        window.location.href="/shop/login"
+				},
+				error:function(error){
+					console.log(error)
+				}
+			})
+		})
+	})
+</script>

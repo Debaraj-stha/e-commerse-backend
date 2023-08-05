@@ -1,0 +1,83 @@
+{{>cdn}}
+{{>nav}}
+<h1 class=" text-success text-uppercase text-center m-5">Add new product</h1>
+<container class="m-auto">
+    <div class="m-5 p-5">
+<form id="newProductForm">
+    <input type="hidden" name="id" id="hidden">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Name:</label>
+        <input type="text" class="form-control" name="name" id="name" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Category:</label>
+        <input type="text" class="form-control" name="category" id="category" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">subCategory:</label>
+        <input type="text" class="form-control" name="subCategory" id="subCategory" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Price:</label>
+        <input type="text" class="form-control" nmae="price" id="price" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">SalesPrice:</label>
+        <input type="text" class="form-control" name="salesPrice" id="salesPrice" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">deliveryCharge:</label>
+        <input type="text" class="form-control" name="deliveryCharge" id="deliveryCharge" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Color:</label>
+        <input type="text" class="form-control" name="color" id="color" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Tags:</label>
+        <input type="text" class="form-control" name="tag" id="tag" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Varient:</label>
+        <input type="text" class="form-control" name="variant" id="varient" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Stock:</label>
+        <input type="text" class="form-control" name="instock" id="stock" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Image</label>
+        <input type="text" class="form-control" name="image" id="image" placeholder="image url">
+    </div>
+
+   
+    <div class="mb-3">
+        <input type="submit" class="btn btn-primary" id="updateData" value="Update">
+    </div>
+</form>
+</div>
+</container>
+<script>
+
+$('#newProductForm').on("submit",function(e){
+    e.preventDefault()
+    console.log("test")
+    const url="http://localhost:8000/shop/product/add";
+    const data=$(this).serialize();
+    const headers={
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    $.post({
+        url: url,
+        method:'POST',
+        data:data,
+        headers:headers,
+        success: function (response) {
+            console.log(response);
+          },
+          error: function (error) {
+            console.error(error);
+          }
+    })
+})
+</script>

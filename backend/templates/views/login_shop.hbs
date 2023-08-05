@@ -1,0 +1,55 @@
+{{>cdn}}
+<h1 class=" text-success text-uppercase text-center m-5">Login to  your shop</h1>
+<container class="m-auto">
+	<div class="m-5 p-5">
+<form id="loginShopForm">
+	<div class="row">
+	<div class="mb-3 col-md-6 col-6-lg">
+		<label for="exampleFormControlInput1" class="form-label">Phone:</label>
+		<input type="text" class="form-control" name="phone" id="phone" placeholder="">
+	</div>
+</div>
+	<div class="mb-3 col-md-6 col-6-lg">
+		<input type="submit" class="btn btn-primary" id="loginShop" value="Login">
+	</div>
+	<p>Not registerd yet?</p>
+	<div class="mb-3 col-md-6 col-6-lg">
+		<a href="/shop/register"><input type="button" class="btn btn-primary" id="registerShop" value="Register"></a>
+	  
+	</div>
+
+</form>
+<script>
+  
+	$(document).ready(function(){
+		  try{
+	let localStorages=localStorage.getItem("shop");
+if(localStorages!=null){
+	window.location.href="/shop/product"
+}
+	console.log(localStorages)
+	}
+	catch(e){}
+		$('#loginShopForm').on('submit', function(e){
+			e.preventDefault()
+			let url="http://localhost:8000/shop/login";
+			let data=$(this).serialize();
+			let header={
+				'Content-Type': 'application/x-www-from-urlencoded'
+			}
+			$.post({
+				url:url,
+				method: 'POST',
+				data:data,
+				header:header,
+				success:function(response){
+					console.log(response)
+						let localStorages = localStorage.setItem("shop",JSON.stringify(response))
+				},
+				error:function(error){
+					console.log(error)
+				}
+			})
+		})
+	})
+</script>

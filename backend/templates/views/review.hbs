@@ -1,0 +1,32 @@
+{{>cdn}}
+{{>nav}}
+{{>cdn}}
+{{>nav}}
+<div class="container mt-4 p-3">
+  <h1 class="text-success text-uppercase text-center m-5">Product Questions</h1>
+</div>
+{{#each result}}
+  <div class="product p-4">
+    {{#each this}}
+    {{#each product}}
+      <div class="circularImage">
+        <img class="mr-3" src={{this.images}} alt="Generic placeholder image" height="100" width="100">
+      </div>
+    {{/each}}
+   
+      <div class="media">
+        <div class="media-body">
+         
+          <h6> {{review}},Rating:{{rating}}</h6>
+          <i class="fa fa-eye"></i>
+          <small>
+            {{#each user}}
+              <p>User: {{this.name}}</p>
+            {{/each}}
+          </small>
+        
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{/each}}

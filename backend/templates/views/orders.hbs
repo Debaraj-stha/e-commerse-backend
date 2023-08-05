@@ -1,0 +1,209 @@
+{{>cdn}}
+{{>nav}}
+<h1 class=" text-success text-uppercase text-center mt-5 pt-4">My Orders</h1>
+<div class="container ">
+
+<table class="table table-primary  ">
+  <thead>
+    <tr>
+      
+      <th scope="col">product Id</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Image</th>
+      <th scope="col">Delivery Address</th>
+      <th scope="col">Order Status</th>
+      <th scope="col">Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody id="order">
+  </tbody>
+
+</table>
+<div id="pagination">
+</div>
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModel">Image updatemodal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="updateForm">
+          <input type="hidden" name="id" id="id">
+          <div class="mb-3">
+        
+          <div class="mb-3 form-group">
+            <label for="exampleFormControlInput1" class="form-label">Status:</label>
+            <input type="text" class="form-control" name="status" id="status" placeholder="Status">
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="updateData" value="Update">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  var data={{{jsonToString order}}}
+  console.log(data)
+  const pagination=document.getElementById('pagination')
+  const order=document.getElementById('order')
+  let currentPage=1;
+  let itemsPerPage=2;
+  let myModel; 
+  function displayOrders(items,wrapper,page,itemsPerPage){
+    console.log("items: " + items)
+    page--;
+    wrapper.innerHTML=""
+let start=page*itemsPerPage;
+let end=start+itemsPerPage;
+let pageData=items.slice(start,end);
+
+for(let i=0;i<pageData.length;i++){
+  let item=pageData[i];
+ 
+  let tr=document.createElement('tr')
+  let td1=document.createElement('td');
+let td2=document.createElement('td');
+let td3=document.createElement('td');
+  let product=item.product[0];
+    
+   product.map((doc,i)=>{
+    let li=document.createElement('li')
+    let names=document.createElement('li')
+    let image=document.createElement('img')
+    console.log(doc)
+    li.innerText = doc._id
+    names.innerText = doc.name
+    image.src=doc.images
+    td2.appendChild(names)
+    td1.appendChild(li)
+    td3.appendChild(image)
+    image.width=100
+   })
+      
+  let deliveryAddress = document.createElement('td')
+  let orderStatus = document.createElement('td')
+  let name = document.createElement('td')
+  let email=document.createElement('td')
+  let phone = document.createElement('td')
+  let actiontd=document.createElement('td')
+  let button=document.createElement('button')
+  deliveryAddress.innerText=item.address
+  orderStatus.innerText=item.orderStatus
+  let user=item.user;
+  name.innerText=user?user.name:""
+  phone.innerText=user?user.phone:""
+  email.innerText=user?user.email:""
+  tr.appendChild(td1)
+  tr.appendChild(td2)
+  tr.appendChild(td3)
+  tr.appendChild(deliveryAddress)
+  tr.appendChild(orderStatus)
+  tr.appendChild(name)
+  
+  tr.appendChild(phone)
+  tr.appendChild(email)
+  button.classList.add('btn')
+  button.classList.add('btn-success')
+  button.classList.add('openModelButton')
+  button.dataset.productId=item.id
+  button.innerText="Update"
+  tr.dataset.productId=item.id
+  tr.appendChild(actiontd)
+  actiontd.appendChild(button)
+  wrapper.appendChild(tr)
+
+}
+  }
+  function setPages(wrapper,items,itemsPerPage){
+    wrapper.innerHTML="";
+    let pages=Math.ceil(data.length/itemsPerPage)
+    for(let i=1;i<pages+1;i++){
+      let btn=displayButton(i,items)
+      wrapper.appendChild(btn)
+    }
+  }
+  function displayButton(page,items){
+    let button=document.createElement("button")
+    button.innerText=page
+    button.classList.add('btn')
+    if(currentPage==page){
+      button.classList.add('btn-primary')
+    }
+
+    button.addEventListener("click",function(){
+      currentPage=page
+      displayOrders(items,order,currentPage,itemsPerPage)
+      attachButtonListeners()
+      let currentButton=document.querySelector('.btn-primary')
+      currentButton.classList.remove('btn-primary')
+      button.classList.add('btn-primary')
+     
+    })
+    return button;
+  }
+  displayOrders(data,order,currentPage,itemsPerPage)
+  setPages(pagination,data,itemsPerPage)
+  attachButtonListeners()
+  function openModal(dataProductId) {
+    let tr = document.querySelector(`tr[data-product-id="${dataProductId}"]`);
+    let myStatus = tr.querySelector('td:nth-child(5)').textContent;
+    let status = document.getElementById('status');
+    let id = document.getElementById('id');
+    id.value = dataProductId;
+    status.value = myStatus;
+    let modal = document.getElementById('updateModal');
+     myModel = new bootstrap.Modal(modal);
+    myModel.show();
+  }
+ 
+  function attachButtonListeners() {
+    const openModelButton = document.querySelectorAll('.openModelButton');
+    openModelButton.forEach(button => {
+      button.addEventListener("click", function () {
+        let dataProductId = button.dataset.productId;
+        openModal(dataProductId);
+      });
+    });
+  }
+  
+  $('#updateForm').on('submit',function(e){
+    event.preventDefault()
+    if (myModel) {
+      myModel.hide();
+    }
+
+    const url="http://localhost:8000/order/status";
+    const data=$(this).serialize();
+    let id=document.getElementById('id').value;
+    const status=document.getElementById('status').value;
+    let tr=document.querySelector(`tr[data-product-id="${id}"]`)
+    let myStatus=tr.querySelector('td:nth-child(5)')
+    console.log(id)
+    const headers={
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    $.post({
+      url:url,
+      data:data,
+      method: 'POST',
+      headers:headers,
+      success: function(response){
+      console.log(response)
+        myStatus.textContent = status
+      },
+      error: function(error){
+        console.log(error);
+      }
+    })
+  })
+
+</script>

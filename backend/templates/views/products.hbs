@@ -1,0 +1,310 @@
+{{>cdn}}
+{{>nav}}
+<H1 class="center text-center text-uppercase pt-5 mt-5">my shop product list</H1>
+<div class="">
+  {{#each shop}}
+  <Div class="">
+    <h3 class="text text-uppercase">Name:{{name}}</h3>
+    <h4 class="text text-uppercase">Location:{{location}}</h4>
+    <h4 class="text text-uppercase">Phone:9800000000</h4>
+  </Div>
+  {{/each}}
+  
+</div>
+<div class="row d-flex justify-content-center">
+<div class="form-group m-3 col-8">
+<input class="form-control" type="text" placeholder="Search item here" name="search" id="search">
+</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModel">Image updatemodal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="updateForm">
+          <input type="hidden" name="id" id="hidden">
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Name:</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Category:</label>
+            <input type="text" class="form-control" name="category" id="category" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">subCategory:</label>
+            <input type="text" class="form-control" name="subCategory" id="subCategory" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Price:</label>
+            <input type="text" class="form-control" nmae="price" id="price" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">SalesPrice:</label>
+            <input type="text" class="form-control" name="salesPrice" id="salesPrice" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">deliveryCharge:</label>
+            <input type="text" class="form-control" name="deliveryCharge" id="deliveryCharge" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Color:</label>
+            <input type="text" class="form-control" name="color" id="color" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Varient:</label>
+            <input type="text" class="form-control" name="variant" id="varient" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Stock:</label>
+            <input type="text" class="form-control" name="instock" id="stock" placeholder="">
+          </div>
+            <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Tags:</label>
+            <input type="text" class="form-control" name="tag" id="tag" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Image</label>
+            <input type="text" class="form-control" name="image" id="image" placeholder="image url">
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-primary" id="updateData" value="Update">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<table class="table table-primary  ">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">subCategory</th>
+      <th scope="col">Price</th>
+      <th scope="col">salesPrice</th>
+      <th scope="col">deliveryCharge</th>
+      <th scope="col">Stock</th>
+      <th scope="col">Image</th>
+      <th scope="col">Tags</th>
+      <th scope="col">Color</th>
+      <th scope="col">Varient</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody id="paginationData">
+    
+  </tbody>
+</table>
+<div class="pagination pagination pagination-sm" id="pages"></div>
+<script>
+  var originalData = {{{jsonToString products}}};
+  var data = originalData.slice();
+  console.log(data)
+  const paginatedData=document.getElementById('paginationData');
+  const pages=document.getElementById('pages');
+  let currentPage=1;
+  const itemsPerPage=5;
+   function pagination(items,wrapper,page,itemsPerPage){
+    page--;
+    wrapper.innerHTML=""
+    let start=page*itemsPerPage;
+    let end=start+itemsPerPage;
+    let pageData=items.slice(start, end);
+    for(let i=0;i<pageData.length;i++){
+      let item=pageData[i];
+      let tr=document.createElement("tr");
+      let td1=document.createElement("td");
+      let td2=document.createElement("td");
+      let td3=document.createElement("td");
+      let td4=document.createElement("td");
+      let td5=document.createElement("td");
+      let td6=document.createElement("td");
+      let td7=document.createElement("td");
+      let td8=document.createElement("td");
+      let td9=document.createElement("td");
+      let td10=document.createElement("td");
+      let td11=document.createElement("td");
+      let td12=document.createElement("td");
+      let td13=document.createElement("td");
+      td1.innerText=item.id;
+      td2.innerText=item.name;
+      td3.innerText=item.category
+     td4.innerText=item.subcategory
+     td5.innerText=item.price
+     td6.innerText=item.salesPrice
+     td7.innerText=item.deliveryCharge,
+     td8.innerText=item.instock
+     let image=document.createElement("img")
+     image.src=item.images
+     image.width="100"
+     td9.appendChild(image)
+     td10.innerText=item.tag
+     td11.innerText=item.color
+     td12.innerText=item.varient
+     let button=document.createElement("button")
+     button.innerText="Update"
+     button.classList.add('btn')
+     button.classList.add('btn-success')
+     button.classList.add('openModelButton')
+     button.dataset.productId=item.id
+     button.id="openModel"
+     td13.appendChild(button)
+     tr.dataset.productId=item.id
+      tr.appendChild(td1)
+      tr.appendChild(td2)
+      tr.appendChild(td3)
+      tr.appendChild(td4)
+      tr.appendChild(td5)
+      tr.appendChild(td6)
+      tr.appendChild(td7)
+      tr.appendChild(td8)
+      tr.appendChild(td9)
+      tr.appendChild(td10)
+      tr.appendChild(td11)
+      tr.appendChild(td12)
+      tr.appendChild(td13)
+      wrapper.appendChild(tr);
+    }
+  }
+  function displayPages(items,wrapper,itemsPerPage){
+wrapper.innerHTML="";
+let pages=Math.ceil(data.length/itemsPerPage);
+for(let i=1;i<pages+1;i++){
+  let btn=displayButton(i,items)
+  wrapper.appendChild(btn)
+}
+  }
+  function displayButton(page, items) {
+    let button = document.createElement('button');
+    button.classList.add('btn')
+    button.innerText = page;
+    if (currentPage == page) {
+      button.classList.add('btn-primary')
+    }
+    button.addEventListener('click', function () {
+      console.log("clicked", page)
+      console.log(items)
+      currentPage = page;
+      pagination(items, paginatedData, currentPage,itemsPerPage)
+      let currentButton = document.querySelector('.btn-primary')
+      currentButton.classList.remove('btn-primary')
+      button.classList.add('btn-primary')
+    })
+    return button
+  }
+  pagination(data,paginatedData,currentPage,itemsPerPage)
+  displayPages(data,pages,itemsPerPage)
+  var updateButtons = document.querySelectorAll(".openModelButton");
+  updateButtons.forEach(button => {
+    button.addEventListener("click", function () {
+
+      var productId = button.dataset.productId;
+      console.log(productId);
+
+      var row = document.querySelector(`tr[data-product-id="${productId}"]`);
+
+      var name = row.querySelector("td:nth-child(2)").textContent;
+      var category = row.querySelector("td:nth-child(3)").textContent;
+      var subCategory = row.querySelector("td:nth-child(4)").textContent;
+      var price = row.querySelector("td:nth-child(5)").textContent;
+      var salesPrice = row.querySelector("td:nth-child(6)").textContent;
+      var deliveryCharge = row.querySelector("td:nth-child(7)").textContent;
+      var image = row.querySelector("img").src;
+      var tags = row.querySelector("td:nth-child(9)").textContent;
+      var color = Array.from(row.querySelectorAll("td:nth-child(10) span")).map(span => span.textContent);
+
+      var variant = Array.from(row.querySelectorAll("td:nth-child(11) span")).map(span => span.textContent);
+
+
+      var modal = document.getElementById("updateModal");
+      modal.querySelector("#updateModel").textContent = name + " - Update";
+      modal.querySelector("#image").value = image;
+      modal.querySelector("#name").value = name;
+      modal.querySelector("#category").value = category;
+      modal.querySelector("#subCategory").value = subCategory;
+      modal.querySelector("#price").value = price;
+      modal.querySelector("#salesPrice").value = salesPrice;
+      modal.querySelector("#deliveryCharge").value = deliveryCharge;
+      modal.querySelector("#color").value = color;
+      modal.querySelector("#varient").value = varient;
+      modal.querySelector('#hidden').value = productId
+      // Show the modal
+      var myModal = new bootstrap.Modal(modal);
+      myModal.show();
+
+    });
+  })
+  $("#updateForm").on("submit", function (event) {
+    event.preventDefault();
+
+    let url = "http://localhost:8000/shop/product";
+    let data = $(this).serialize();
+
+    let headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Custom-Header": "CustomValue",
+    };
+    $.ajax({
+      url: url,
+      type: "POST",
+      data: data,
+      headers: headers,
+      success: function (response) {
+        console.log(response);
+      },
+      error: function (error) {
+        console.error(error);
+      }
+    });
+  });
+
+
+
+    let search = document.getElementById("search");
+
+    search.addEventListener('keydown', function(e) {
+      if (e.key === "Enter") {
+        console.log(data)
+        let val = search.value; // Get the current value of the input field
+  let url=`http://localhost:8000/product/search?q=${val}`;
+        let headers = {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        };
+  
+        $.get({
+          url: url,
+          method: 'GET',
+          success: function(response) {
+            console.log(response);
+            data=response;
+            currentPage=1;
+            pagination(response,paginatedData,currentPage,itemsPerPage) 
+            displayPages(response,pages,itemsPerPage)
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      }
+      else if (e.key === "Backspace" && search.value === "") {
+        data = originalData.slice(); 
+        currentPage = 1;
+        pagination(data, paginatedData, currentPage, itemsPerPage);
+        displayPages(data, pages, itemsPerPage);
+      }
+    });
+  
+  
+</script>

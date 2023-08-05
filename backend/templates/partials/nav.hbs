@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link"id="dashboard" href="/dashboard">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"id="product" href="/shop/product">Product</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="addProduct"href="/shop/product/add">Add Product</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="question" href="/product/question">Questions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="review" href="/product/review">Reviews</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/shop/login">Login shop</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin/login">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="message" href="/message/post">Message</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/orders/get">Orders</a>
+      </li>
+    </ul>
+  </div>
+  <!-- Add your image below this line -->
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOSIZ6hZseAPKb42yOVWSqt00bWSi8yusbMQ&usqp=CAU" height="60" alt="Your Image Description">
+</nav>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    
+    const shop = localStorage.getItem("shop"); 
+const parsedShpop=JSON.parse(shop)
+    const questionsLink = document.getElementById("question");
+    const reviewLink = document.getElementById("review");
+    const productLink = document.getElementById("product");
+    const addProductLink = document.getElementById("addProduct");
+    const dashboardLink = document.getElementById("dashboard");
+    const messageLink = document.getElementById("message");
+    questionsLink.href = `/product/question?shop=${parsedShpop[0]._id}`;
+    reviewLink.href = `/product/review?shop=${parsedShpop[0]._id}`;
+    productLink.href = `/shop/product?shop=${parsedShpop[0]._id}`;
+    addProductLink.href = `/shop/product/add?shop=${parsedShpop[0]._id}`;
+    dashboardLink.href = `/dashboard?shop=${parsedShpop[0]._id}`;
+    messageLink.href=`/message/post?shopId=${parsedShpop[0]._id}`
+  });
+</script>
