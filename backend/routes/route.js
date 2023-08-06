@@ -748,7 +748,7 @@ router.post("/product/question/answer", async (req, res) => {
     if (question) {
       question.questionAnswer.forEach(async (item) => {
         if (item._id.toString() === questionObjectId) {
-          item.answer = " newAnswer";
+          item.answer = req.body.answer;
         }
       });
       await question.save();
@@ -762,7 +762,7 @@ router.post("/product/question/answer", async (req, res) => {
     res.status(500).send({ message: "Error updating answer" });
   }
 
-  res.send("success");
+
 });
 router.get("/product/question/answer", (req, res) => {
   res.render("answer");
@@ -1116,4 +1116,7 @@ router.post("/message/to-shop", async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 });
+router.get('/metting',(req,res)=>{
+  res.render("metting")
+})
 module.exports = router;

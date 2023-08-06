@@ -19,12 +19,13 @@
     const shop = localStorage.getItem("shop"); 
     const parsedShpop=JSON.parse(shop)
     const shopId=parsedShpop[0]._id;
-    const answer=document.getElementById('answer').value;
+  
     const urlParams=new URLSearchParams(window.location.search)
     const productId=urlParams.get('productId')
     const questionId=urlParams.get('questionId')
     const button=document.getElementById('submit');
     button.addEventListener('click',function(e){
+      const answer=document.getElementById('answer').value;
       const url="http://localhost:8000/product/question/answer";
       $.post({
         url: url,
