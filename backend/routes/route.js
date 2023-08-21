@@ -17,9 +17,7 @@ const moment = require("moment");
 const http = require("http");
 const oneSignalConff = require("../config/onseSignalCongif");
 const OneSignal = require("onesignal-node");
-router.get("/", function (req, res) {
-  res.send("working");
-});
+
 
 router.post("/login", async (req, res) => {
   try {

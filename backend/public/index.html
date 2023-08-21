@@ -1,11 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <h1>Working with node and expresss</h1>
 </body>
+<script>
+    const myPeer = new Peer(undefined, {
+        host: "/",
+        port: '3001'
+    })
+    const videoGriod = document.getElementById('videoGriod')
+    const video = document.createElement('video')
+    video.muted = true
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(function (stream) {
+        addVideoStream(video, stream)
+        myPeer.on("call", call => {
+            call.answer(stream);
+            const video = document.createElement('video')
+            call.on("stream", stream => {
+                addVideoStream(video, stream)
+            })
+        })
+        socket.on('user-connecrt', userId => {
+            connectNewUser(userId, stream)
+        })
+    })
+    function connectToNewUser(userId, stream) {
+        const call=myPeer.call(userId, stream)
+        const vodeo=documet.createElement("vodeo")
+        call.on("stream",stream=>{
+            addVideoStream(video,stream)
+        })
+        call.on('close',()=>{
+            video.remove()
+        })
+        peers[userId] = call
+    }
+    socket.on("user-disconnetced", userId => {
+        if (peers[userId])
+            peer[userId].cloase()
+    })
+    myPeer.on("open",id=>{
+        socket.emit("join-user",roomId,id)
+    })
+    function addVideoStream(video,stream){
+        video.srcObject=stream;
+        video.addEventListener("loadedmetadata",()=>{
+            video.play()
+        })
+    }
+</script>
+
 </html>

@@ -77,7 +77,8 @@ var lastSevenDaysSellArray = {{ jsonToString lastSevenDaysSellArray }};
     type: 'line',
     data: {
       labels: ["Sun", "Mon", "Tue", "Wed", "Thus",'Fri','Sat'],
-     datasets: [{
+     datasets: [
+     {
       label:"Weakly sales",
       data:lastSevenDaysSellArray,
       backgroundColor: [
@@ -87,7 +88,8 @@ var lastSevenDaysSellArray = {{ jsonToString lastSevenDaysSellArray }};
       'rgba(200, 99, 132, .7)',
     ],
     borderWidth: 2
-     }]
+     }
+     ]
     },
     options: {
       responsive: true

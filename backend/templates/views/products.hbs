@@ -63,7 +63,7 @@
             <label for="exampleFormControlInput1" class="form-label">Stock:</label>
             <input type="text" class="form-control" name="instock" id="stock" placeholder="">
           </div>
-            <div class="mb-3">
+                  <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Tags:</label>
             <input type="text" class="form-control" name="tag" id="tag" placeholder="">
           </div>
@@ -111,7 +111,7 @@
 <script>
   var originalData = {{{jsonToString products}}};
   var data = originalData.slice();
-  console.log(data)
+  let myModel; 
   const paginatedData=document.getElementById('paginationData');
   const pages=document.getElementById('pages');
   let currentPage=1;
@@ -198,6 +198,7 @@ for(let i=1;i<pages+1;i++){
       console.log(items)
       currentPage = page;
       pagination(items, paginatedData, currentPage,itemsPerPage)
+      attachButtonListeners()
       let currentButton = document.querySelector('.btn-primary')
       currentButton.classList.remove('btn-primary')
       button.classList.add('btn-primary')
@@ -206,14 +207,18 @@ for(let i=1;i<pages+1;i++){
   }
   pagination(data,paginatedData,currentPage,itemsPerPage)
   displayPages(data,pages,itemsPerPage)
-  var updateButtons = document.querySelectorAll(".openModelButton");
-  updateButtons.forEach(button => {
-    button.addEventListener("click", function () {
-
-      var productId = button.dataset.productId;
-      console.log(productId);
-
-      var row = document.querySelector(`tr[data-product-id="${productId}"]`);
+  attachButtonListeners()
+  function attachButtonListeners() {
+    const openModelButton = document.querySelectorAll('.openModelButton');
+    openModelButton.forEach(button => {
+      button.addEventListener("click", function () {
+        let dataProductId = button.dataset.productId;
+        openModal(dataProductId);
+      });
+    });
+  }
+  function openModal(dataProductId) {
+    var row = document.querySelector(`tr[data-product-id="${dataProductId}"]`);
 
       var name = row.querySelector("td:nth-child(2)").textContent;
       var category = row.querySelector("td:nth-child(3)").textContent;
@@ -239,13 +244,12 @@ for(let i=1;i<pages+1;i++){
       modal.querySelector("#deliveryCharge").value = deliveryCharge;
       modal.querySelector("#color").value = color;
       modal.querySelector("#varient").value = varient;
-      modal.querySelector('#hidden').value = productId
+      modal.querySelector('#hidden').value = dataProductId
       // Show the modal
-      var myModal = new bootstrap.Modal(modal);
-      myModal.show();
-
-    });
-  })
+       myModal = new bootstrap.Modal(modal);
+     
+    myModal.show();
+  }
   $("#updateForm").on("submit", function (event) {
     event.preventDefault();
 
